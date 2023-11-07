@@ -46,6 +46,9 @@ kotlin {
                 implementation(compose.material)
                 @OptIn(ExperimentalComposeLibrary::class)
                 implementation(compose.components.resources)
+
+                implementation(projects.libraries.core)
+                implementation(projects.apis.product)
             }
         }
     }

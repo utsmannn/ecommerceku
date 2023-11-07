@@ -19,3 +19,6 @@ dependencyResolutionManagement {
 }
 
 include(":composeApp")
+include(":libraries:core")
+include(":features:home")
+include(":apis:product")
