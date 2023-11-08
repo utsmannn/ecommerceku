@@ -3,10 +3,14 @@ package com.utsman.features.home.viewmodel
 import com.utsman.apis.product.ProductRepository
 import com.utsman.apis.product.model.ProductItemList
 import com.utsman.features.home.HomeUiState
+import com.utsman.libraries.core.state.Async
 import com.utsman.libraries.core.viewmodel.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -21,22 +25,30 @@ class HomeViewModel(private val productRepository: ProductRepository) : ViewMode
 
     fun getProductList(page: Int) = viewModelScope.launch {
         productRepository.getProductList(page)
-            .stateIn(this)
             .onStart {
                 updateUiState {
                     copy(
-                        isLoading = true
+                        asyncProduct = Async.Loading
                     )
                 }
             }
-            .collectLatest {
+            .catch {
+                it.printStackTrace()
                 updateUiState {
                     copy(
-                        isLoading = false,
-                        productList = it
+                        asyncProduct = Async.Failure(it)
                     )
                 }
             }
+            .onEach {
+                updateUiState {
+                    copy(
+                        asyncProduct = Async.Success(it)
+                    )
+                }
+            }
+            .stateIn(this)
+            .collect()
     }
 
     private fun updateUiState(block: HomeUiState.() -> HomeUiState) {

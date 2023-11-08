@@ -1,9 +1,6 @@
 package com.utsman.libraries.core.viewmodel
 
 import androidx.compose.runtime.compositionLocalOf
-import kotlinx.atomicfu.locks.SynchronizedObject
-import kotlinx.atomicfu.locks.synchronized
-import kotlin.native.concurrent.ThreadLocal
 
 @OptIn(ExperimentalStdlibApi::class)
 class ViewModelHost : AutoCloseable {

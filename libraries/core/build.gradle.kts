@@ -41,6 +41,7 @@ kotlin {
                 api(libs.ktorClient.contentNegotiation)
                 api(libs.ktorClient.logging)
                 api(libs.ktorClient.serialization)
+                api(libs.kotlin.coroutine)
             }
         }
         val commonTest by getting {
@@ -54,6 +55,7 @@ kotlin {
                 api(libs.android.viewmodelKtx)
                 api(libs.android.viewmodelCompose)
                 api(libs.androidx.activity.compose)
+                api(libs.ktorClient.okhttp)
             }
         }
 

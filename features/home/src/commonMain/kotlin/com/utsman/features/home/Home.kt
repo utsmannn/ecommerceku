@@ -21,7 +21,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.utsman.apis.product.LocalProductRepository
 import com.utsman.features.home.viewmodel.HomeViewModel
+import com.utsman.libraries.core.state.Async
 import com.utsman.libraries.core.viewmodel.rememberViewModel
+import com.utsman.libraries.sharedui.Failure
 import com.utsman.libraries.sharedui.Loading
 import com.utsman.libraries.sharedui.ProductItem
 
@@ -39,16 +41,30 @@ fun Home() {
         columns = GridCells.Fixed(2),
         contentPadding = PaddingValues(12.dp)
     ) {
-        items(uiState.productList) { product ->
-            ProductItem(product)
-        }
 
-        if (uiState.isLoading) {
-            item(
-                span = { GridItemSpan(2) }
-            ) {
-                Loading(modifier = Modifier.fillMaxWidth())
+        when (val async = uiState.asyncProduct) {
+            is Async.Loading -> {
+                item(
+                    span = { GridItemSpan(2) }
+                ) {
+                    Loading(modifier = Modifier.fillMaxWidth())
+                }
             }
+            is Async.Failure -> {
+                val throwable = async.throwable
+                item(
+                    span = { GridItemSpan(2) }
+                ) {
+                    Failure(modifier = Modifier.fillMaxWidth(), throwable.message)
+                }
+            }
+            is Async.Success -> {
+                val data = async.data
+                items(data) { product ->
+                    ProductItem(product)
+                }
+            }
+            else -> {}
         }
     }
 }
