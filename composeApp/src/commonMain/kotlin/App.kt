@@ -5,7 +5,7 @@ import androidx.compose.runtime.remember
 import com.utsman.apis.product.LocalProductRepository
 import com.utsman.apis.product.ProductRepository
 import com.utsman.apis.product.datasources.ProductNetworkDataSource
-import com.utsman.features.home.Home
+import com.utsman.features.home.ui.Home
 import com.utsman.libraries.core.viewmodel.LocalViewModelHost
 import com.utsman.libraries.core.viewmodel.ViewModelHost
 

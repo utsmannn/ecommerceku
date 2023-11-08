@@ -1,17 +1,13 @@
 package com.utsman.features.home.viewmodel
 
 import com.utsman.apis.product.ProductRepository
-import com.utsman.apis.product.model.ProductItemList
-import com.utsman.features.home.HomeUiState
-import com.utsman.libraries.core.state.Async
+import com.utsman.features.home.state.HomeIntent
+import com.utsman.features.home.state.HomeUiState
+import com.utsman.libraries.core.state.Intent
 import com.utsman.libraries.core.viewmodel.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
@@ -19,6 +15,13 @@ class HomeViewModel(private val productRepository: ProductRepository) : ViewMode
 
     private val _homeUiState: MutableStateFlow<HomeUiState> = MutableStateFlow(HomeUiState())
     val homeUiState: StateFlow<HomeUiState> = _homeUiState
+
+    private val _homeIntent: MutableStateFlow<Intent> = MutableStateFlow(Intent.Idle)
+    val homeIntent: MutableStateFlow<Intent> = _homeIntent
+
+    fun sendIntent(homeIntent: HomeIntent) = viewModelScope.launch {
+        _homeIntent.value = homeIntent
+    }
 
     fun getProductList(page: Int) = viewModelScope.launch {
         productRepository.getProductList(page)

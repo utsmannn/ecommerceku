@@ -1,4 +1,4 @@
-package com.utsman.features.home
+package com.utsman.features.home.state
 
 import com.utsman.apis.product.model.ProductItemList
 import com.utsman.libraries.core.state.Async
