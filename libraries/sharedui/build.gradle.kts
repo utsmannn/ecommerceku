@@ -15,14 +15,14 @@ kotlin {
             }
         }
     }
-    
+
     listOf(
         iosX64(),
         iosArm64(),
         iosSimulatorArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = "home"
+            baseName = "sharedui"
         }
     }
 
@@ -30,7 +30,19 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 //put your multiplatform dependencies here
-                implementation(projects.libraries.sharedui)
+
+                api(compose.runtime)
+                api(compose.foundation)
+                api(compose.material)
+                @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
+                api(compose.components.resources)
+
+                api(libs.ktorClient.core)
+                api(libs.ktorClient.contentNegotiation)
+                api(libs.ktorClient.logging)
+                api(libs.ktorClient.serialization)
+                api(libs.kamelImage)
+
                 implementation(projects.apis.product)
             }
         }
@@ -39,11 +51,25 @@ kotlin {
                 implementation(libs.kotlin.test)
             }
         }
+
+        val androidMain by getting {
+            dependencies {
+                api(libs.android.viewmodelKtx)
+                api(libs.android.viewmodelCompose)
+                api(libs.androidx.activity.compose)
+            }
+        }
+
+        val iosMain by getting {
+            dependencies {
+                api(libs.ktorClient.darwin)
+            }
+        }
     }
 }
 
 android {
-    namespace = "com.utsman.features.home"
+    namespace = "com.utsman.libraries.sharedui"
     compileSdk = 34
     defaultConfig {
         minSdk = 24
