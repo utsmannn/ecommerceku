@@ -49,6 +49,7 @@ kotlin {
 
                 implementation(projects.libraries.core)
                 implementation(projects.apis.product)
+                implementation(projects.features.home)
             }
         }
     }
