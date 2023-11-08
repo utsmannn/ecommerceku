@@ -36,6 +36,11 @@ kotlin {
                 api(compose.material)
                 @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
                 api(compose.components.resources)
+
+                api(libs.ktorClient.core)
+                api(libs.ktorClient.contentNegotiation)
+                api(libs.ktorClient.logging)
+                api(libs.ktorClient.serialization)
             }
         }
         val commonTest by getting {
@@ -49,6 +54,12 @@ kotlin {
                 api(libs.android.viewmodelKtx)
                 api(libs.android.viewmodelCompose)
                 api(libs.androidx.activity.compose)
+            }
+        }
+
+        val iosMain by getting {
+            dependencies {
+                api(libs.ktorClient.darwin)
             }
         }
     }
