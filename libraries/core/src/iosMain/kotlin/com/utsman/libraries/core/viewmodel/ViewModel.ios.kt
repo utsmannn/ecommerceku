@@ -26,8 +26,8 @@ actual abstract class ViewModel {
 
 @Composable
 actual fun <T: ViewModel> rememberViewModel(viewModel: () -> T): T {
+    val host = LocalViewModelHost.current
     val vm = remember {
-        val host = ViewModelHost.getInstance()
         host.getViewModel(viewModel.invoke())
     }
     DisposableEffect(vm) {

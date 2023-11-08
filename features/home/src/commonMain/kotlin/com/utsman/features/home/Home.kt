@@ -6,14 +6,15 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import com.utsman.apis.product.ProductRepository
+import com.utsman.apis.product.LocalProductRepository
 import com.utsman.features.home.viewmodel.HomeViewModel
 import com.utsman.libraries.core.viewmodel.rememberViewModel
 
 @Composable
 fun Home() {
     Column {
-        val viewModel = rememberViewModel { HomeViewModel(ProductRepository()) }
+        val productRepository = LocalProductRepository.current
+        val viewModel = rememberViewModel { HomeViewModel(productRepository) }
         val count by viewModel.count.collectAsState()
         Text("Count: $count")
 

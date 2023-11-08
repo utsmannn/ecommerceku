@@ -21,8 +21,8 @@ actual abstract class ViewModel : androidx.lifecycle.ViewModel() {
 @Composable
 actual fun <T: ViewModel> rememberViewModel(viewModel: () -> T): T {
     val lifecycle = LocalLifecycleOwner.current.lifecycle
+    val host = LocalViewModelHost.current
     val vm = remember {
-        val host = ViewModelHost.getInstance()
         host.getViewModel(viewModel.invoke())
     }
     DisposableEffect(lifecycle) {

@@ -1,5 +1,6 @@
 package com.utsman.libraries.core.viewmodel
 
+import androidx.compose.runtime.compositionLocalOf
 import kotlinx.atomicfu.locks.SynchronizedObject
 import kotlinx.atomicfu.locks.synchronized
 import kotlin.native.concurrent.ThreadLocal
@@ -19,18 +20,6 @@ class ViewModelHost : AutoCloseable {
     override fun close() {
         viewModels.clear()
     }
-
-    @ThreadLocal
-    companion object : SynchronizedObject() {
-
-        private var _host: ViewModelHost? = null
-
-        fun getInstance(): ViewModelHost {
-            return synchronized(this) {
-                (_host ?: ViewModelHost()).also {
-                    _host = it
-                }
-            }
-        }
-    }
 }
+
+val LocalViewModelHost = compositionLocalOf<ViewModelHost> { error("not provided") }
