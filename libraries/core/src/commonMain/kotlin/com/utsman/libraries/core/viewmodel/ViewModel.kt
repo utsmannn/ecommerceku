@@ -34,10 +34,6 @@ abstract class ViewModel<S: Any, I: Intent>(initialState: S) : ViewModelPlatform
         val newUiState = block.invoke(currentUiState)
         _uiState.value = newUiState
     }
-
-    operator fun getValue(i: I?, property: KProperty<Any?>): ViewModel<S, I> {
-        return this
-    }
 }
 
 @Composable
