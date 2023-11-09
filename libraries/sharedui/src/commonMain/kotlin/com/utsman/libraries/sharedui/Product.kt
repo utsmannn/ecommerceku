@@ -15,6 +15,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.utsman.apis.product.model.ProductItemList
+import com.utsman.libraries.core.utils.currency
 
 @Composable
 fun ProductItem(productListItem: ProductItemList, onClickItem: (ProductItemList) -> Unit = {}) {
@@ -48,7 +49,7 @@ fun ProductItem(productListItem: ProductItemList, onClickItem: (ProductItemList)
             )
 
             Text(
-                text = productListItem.price.toString(),
+                text = productListItem.price.currency,
                 fontWeight = FontWeight.Black
             )
         }
