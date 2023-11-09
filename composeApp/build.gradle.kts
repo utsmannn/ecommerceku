@@ -44,12 +44,21 @@ kotlin {
                 implementation(compose.runtime)
                 implementation(compose.foundation)
                 implementation(compose.material)
+                implementation(compose.animation)
+                implementation(compose.animationGraphics)
                 @OptIn(ExperimentalComposeLibrary::class)
                 implementation(compose.components.resources)
 
+                implementation(libs.kotlin.coroutine)
+
+                implementation(libs.voyager.navigator)
+                implementation(libs.voyager.transitions)
+
                 implementation(projects.libraries.core)
                 implementation(projects.apis.product)
+
                 implementation(projects.features.home)
+                implementation(projects.features.detail)
             }
         }
     }

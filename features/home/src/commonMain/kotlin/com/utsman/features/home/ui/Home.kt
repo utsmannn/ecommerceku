@@ -24,7 +24,7 @@ import com.utsman.libraries.sharedui.Loading
 import com.utsman.libraries.sharedui.ProductItem
 
 @Composable
-fun Home() {
+fun Home(onClickItem: (Int) -> Unit) {
     val productRepository = LocalProductRepository.current
     val viewModel = rememberViewModel { HomeViewModel(productRepository) }
     val uiState by viewModel.homeUiState.collectAsState()
@@ -77,9 +77,7 @@ fun Home() {
                     val data = async.data
                     items(data) { product ->
                         ProductItem(product) {
-                            viewModel.sendIntent(
-                                HomeIntent.ShowSnackBar(it.name)
-                            )
+                            onClickItem.invoke(it.id)
                         }
                     }
                 }

@@ -22,7 +22,7 @@ paging-common = "3.3.0-alpha02-0.4.0"
 paging-android = "3.3.0-alpha02"
 coroutine = "1.7.3"
 kamelImage = "0.8.2"
-preCompose = "1.5.6"
+voyager = "1.0.0-rc10"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -55,8 +55,8 @@ paging-appcash-compose = { module = "app.cash.paging:paging-compose-common", ver
 paging-android-runtime = { module = "androidx.paging:paging-runtime", version.ref = "paging-android" }
 paging-android-compose = { module = "androidx.paging:paging-compose", version.ref = "paging-android" }
 kamelImage = { module = "media.kamel:kamel-image", version.ref = "kamelImage" }
-preCompose = { module = "moe.tlaster:precompose", version.ref = "preCompose" }
-
+voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }
+voyager-transitions = { module = "cafe.adriel.voyager:voyager-transitions", version.ref = "voyager" }
 
 [plugins]
 jetbrainsCompose = { id = "org.jetbrains.compose", version.ref = "compose-plugin" }
