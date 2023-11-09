@@ -1,4 +1,3 @@
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -10,7 +9,6 @@ import cafe.adriel.voyager.core.screen.ScreenKey
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import cafe.adriel.voyager.transitions.SlideTransition
 import com.utsman.apis.product.LocalProductRepository
 import com.utsman.apis.product.ProductRepository
 import com.utsman.apis.product.datasources.ProductNetworkDataSource
@@ -50,7 +48,8 @@ fun App() {
             Navigator(
                 screen = ScreenRegistry.get(ScreenRoute.Home)
             ) {
-                SlideTransition(it)
+                VoyagerSwipeable(it)
+//                SlideTransition(it)
             }
         }
     }

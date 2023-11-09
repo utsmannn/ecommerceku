@@ -1,0 +1,1 @@
+actual val shouldUseSwipeBack: Boolean = true

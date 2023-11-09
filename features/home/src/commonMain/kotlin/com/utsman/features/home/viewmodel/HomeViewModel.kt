@@ -5,6 +5,7 @@ import com.utsman.features.home.state.HomeIntent
 import com.utsman.features.home.state.HomeUiState
 import com.utsman.libraries.core.state.Intent
 import com.utsman.libraries.core.viewmodel.ViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -21,6 +22,8 @@ class HomeViewModel(private val productRepository: ProductRepository) : ViewMode
 
     fun sendIntent(homeIntent: HomeIntent) = viewModelScope.launch {
         _homeIntent.value = homeIntent
+        delay(80)
+        _homeIntent.value = Intent.Idle
     }
 
     fun getProductList(page: Int) = viewModelScope.launch {

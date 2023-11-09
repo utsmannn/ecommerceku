@@ -33,7 +33,9 @@ fun Home(onClickItem: (Int) -> Unit) {
     val scaffoldState = rememberScaffoldState()
 
     LaunchedEffect(Unit) {
-        viewModel.sendIntent(HomeIntent.LoadProductList(1))
+        if (uiState.asyncProduct !is Async.Success) {
+            viewModel.sendIntent(HomeIntent.LoadProductList(1))
+        }
     }
 
     LaunchedEffect(homeIntent) {
