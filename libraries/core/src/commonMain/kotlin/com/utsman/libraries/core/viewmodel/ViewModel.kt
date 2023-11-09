@@ -6,9 +6,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlin.reflect.KProperty
 
 expect abstract class ViewModelPlatform() {
     val viewModelScope: CoroutineScope
@@ -18,24 +17,28 @@ expect abstract class ViewModelPlatform() {
 }
 
 abstract class ViewModel<S: Any, I: Intent>(initialState: S) : ViewModelPlatform() {
-    private val _homeUiState: MutableStateFlow<S> = MutableStateFlow(initialState)
-    val homeUiState: StateFlow<S> = _homeUiState
+    private val _uiState: MutableStateFlow<S> = MutableStateFlow(initialState)
+    val uiState: StateFlow<S> = _uiState
 
-    private val _homeIntent: MutableStateFlow<Intent> = MutableStateFlow(Intent.Idle)
-    val homeIntent: MutableStateFlow<Intent> = _homeIntent
+    private val _intent: MutableStateFlow<Intent> = MutableStateFlow(Intent.Idle)
+    val intent: MutableStateFlow<Intent> = _intent
 
     fun sendIntent(intent: I) = viewModelScope.launch {
-        _homeIntent.value = intent
+        _intent.value = intent
         delay(80)
-        _homeIntent.value = Intent.Idle
+        _intent.value = Intent.Idle
     }
 
     protected fun updateUiState(block: S.() -> S) {
-        val currentUiState = _homeUiState.value
+        val currentUiState = _uiState.value
         val newUiState = block.invoke(currentUiState)
-        _homeUiState.value = newUiState
+        _uiState.value = newUiState
+    }
+
+    operator fun getValue(i: I?, property: KProperty<Any?>): ViewModel<S, I> {
+        return this
     }
 }
 
 @Composable
-expect fun <T: ViewModel<*, *>> rememberViewModel(viewModel: () -> T): T
+expect fun <T: ViewModel<*, *>> rememberViewModel(isRetain: Boolean = true, viewModel: () -> T): T

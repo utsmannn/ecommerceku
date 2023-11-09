@@ -25,10 +25,14 @@ actual abstract class ViewModelPlatform {
 }
 
 @Composable
-actual fun <T: ViewModel<*, *>> rememberViewModel(viewModel: () -> T): T {
+actual fun <T: ViewModel<*, *>> rememberViewModel(isRetain: Boolean, viewModel: () -> T): T {
     val host = LocalViewModelHost.current
     val vm = remember {
-        host.getViewModel(viewModel.invoke())
+        if (isRetain) {
+            host.getViewModel(viewModel.invoke())
+        } else {
+            viewModel.invoke()
+        }
     }
     DisposableEffect(vm) {
         onDispose {

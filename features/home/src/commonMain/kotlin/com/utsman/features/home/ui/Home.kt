@@ -27,8 +27,8 @@ import com.utsman.libraries.sharedui.ProductItem
 fun Home(onClickItem: (Int) -> Unit) {
     val productRepository = LocalProductRepository.current
     val viewModel = rememberViewModel { HomeViewModel(productRepository) }
-    val uiState by viewModel.homeUiState.collectAsState()
-    val homeIntent by viewModel.homeIntent.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
+    val homeIntent by viewModel.intent.collectAsState()
 
     val scaffoldState = rememberScaffoldState()
 
