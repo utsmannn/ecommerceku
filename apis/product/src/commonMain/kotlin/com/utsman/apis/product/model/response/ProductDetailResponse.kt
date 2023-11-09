@@ -1,4 +1,4 @@
-package com.utsman.apis.product.model
+package com.utsman.apis.product.model.response
 
 
 import kotlinx.serialization.SerialName

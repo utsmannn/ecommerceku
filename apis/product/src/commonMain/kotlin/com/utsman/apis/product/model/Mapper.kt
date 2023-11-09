@@ -1,5 +1,10 @@
 package com.utsman.apis.product.model
 
+import com.utsman.apis.product.model.entity.ProductDetail
+import com.utsman.apis.product.model.entity.ProductItemList
+import com.utsman.apis.product.model.response.ProductDetailResponse
+import com.utsman.apis.product.model.response.ProductListResponse
+
 fun ProductListResponse.DataResponse.toProductItemList(): ProductItemList {
     return ProductItemList(
         id = id ?: 0,

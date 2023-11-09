@@ -1,4 +1,4 @@
-package com.utsman.apis.product.model
+package com.utsman.apis.product.model.entity
 
 data class ProductItemList(
     val id: Int,

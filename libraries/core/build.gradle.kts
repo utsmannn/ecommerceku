@@ -42,6 +42,9 @@ kotlin {
                 api(libs.ktorClient.logging)
                 api(libs.ktorClient.serialization)
                 api(libs.kotlin.coroutine)
+
+                api(libs.paging.appcash.common)
+                api(libs.paging.appcash.compose)
             }
         }
         val commonTest by getting {
@@ -56,6 +59,8 @@ kotlin {
                 api(libs.android.viewmodelCompose)
                 api(libs.androidx.activity.compose)
                 api(libs.ktorClient.okhttp)
+                api(libs.paging.android.runtime)
+                api(libs.paging.android.compose)
             }
         }
 

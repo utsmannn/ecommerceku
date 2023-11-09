@@ -7,14 +7,16 @@ import cafe.adriel.voyager.navigator.Navigator
 import com.utsman.apis.product.LocalProductRepository
 import com.utsman.apis.product.ProductRepository
 import com.utsman.apis.product.datasources.ProductNetworkDataSource
+import com.utsman.apis.product.datasources.ProductPagingSources
 import com.utsman.libraries.core.viewmodel.LocalViewModelHost
 import com.utsman.libraries.core.viewmodel.ViewModelHost
 
 @Composable
 fun App() {
     val viewModelHost = remember { ViewModelHost() }
-    val productNetworkDataSources = ProductNetworkDataSource()
-    val productRepository = remember { ProductRepository(productNetworkDataSources) }
+    val productNetworkDataSources = remember { ProductNetworkDataSource() }
+    val productPagingSources = remember { ProductPagingSources(productNetworkDataSources) }
+    val productRepository = remember { ProductRepository(productNetworkDataSources, productPagingSources) }
 
     CompositionLocalProvider(
         LocalProductRepository provides productRepository,

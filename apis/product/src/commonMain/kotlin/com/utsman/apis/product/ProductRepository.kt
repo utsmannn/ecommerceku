@@ -1,22 +1,31 @@
 package com.utsman.apis.product
 
 import androidx.compose.runtime.compositionLocalOf
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
 import com.utsman.apis.product.datasources.ProductNetworkDataSource
-import com.utsman.apis.product.model.ProductDetail
-import com.utsman.apis.product.model.ProductDetailResponse
-import com.utsman.apis.product.model.ProductItemList
-import com.utsman.apis.product.model.ProductListResponse
+import com.utsman.apis.product.datasources.ProductPagingSources
+import com.utsman.apis.product.model.entity.ProductDetail
+import com.utsman.apis.product.model.response.ProductDetailResponse
+import com.utsman.apis.product.model.entity.ProductItemList
+import com.utsman.apis.product.model.response.ProductListResponse
 import com.utsman.apis.product.model.toProductDetail
 import com.utsman.apis.product.model.toProductItemList
-import com.utsman.libraries.core.network.NetworkDataSources
 import com.utsman.libraries.core.repository.Repository
 import com.utsman.libraries.core.state.Async
 import kotlinx.coroutines.flow.Flow
 
 
 class ProductRepository(
-    private val networkDataSources: ProductNetworkDataSource
+    private val networkDataSources: ProductNetworkDataSource,
+    private val productPagingSources: ProductPagingSources
 ) : Repository() {
+
+    val productPagingFlow = Pager(
+        config = PagingConfig(pageSize = 10)
+    ) {
+        productPagingSources
+    }.flow
 
     suspend fun getProductList(page: Int): Flow<Async<List<ProductItemList>>> {
         return suspend {

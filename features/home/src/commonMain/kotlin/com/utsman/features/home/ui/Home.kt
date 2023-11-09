@@ -14,6 +14,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.paging.LoadState
+import androidx.paging.PagingData
+import app.cash.paging.compose.collectAsLazyPagingItems
 import com.utsman.apis.product.LocalProductRepository
 import com.utsman.features.home.state.HomeIntent
 import com.utsman.features.home.viewmodel.HomeViewModel
@@ -22,6 +25,7 @@ import com.utsman.libraries.core.viewmodel.rememberViewModel
 import com.utsman.libraries.sharedui.Failure
 import com.utsman.libraries.sharedui.Loading
 import com.utsman.libraries.sharedui.ProductItem
+import kotlinx.coroutines.flow.map
 
 @Composable
 fun Home(onClickItem: (Int) -> Unit) {
@@ -30,18 +34,15 @@ fun Home(onClickItem: (Int) -> Unit) {
     val uiState by viewModel.uiState.collectAsState()
     val homeIntent by viewModel.intent.collectAsState()
 
-    val scaffoldState = rememberScaffoldState()
+    val productPaged = viewModel.productPagedFlow.collectAsLazyPagingItems()
 
-    LaunchedEffect(Unit) {
-        if (uiState.asyncProduct !is Async.Success) {
-            viewModel.sendIntent(HomeIntent.LoadProductList(1))
-        }
-    }
+    val scaffoldState = rememberScaffoldState()
 
     LaunchedEffect(homeIntent) {
         when (val intent = homeIntent) {
             is HomeIntent.LoadProductList -> {
-                viewModel.getProductList(intent.page)
+                //viewModel.getProductList(intent.page)
+//                viewModel.getProductPaged()
             }
             is HomeIntent.ShowSnackBar -> {
                 val message = intent.message
@@ -59,31 +60,40 @@ fun Home(onClickItem: (Int) -> Unit) {
             contentPadding = PaddingValues(12.dp)
         ) {
 
-            when (val async = uiState.asyncProduct) {
-                is Async.Loading -> {
-                    item(
-                        span = { GridItemSpan(2) }
-                    ) {
+            items(productPaged.itemCount) { index ->
+                val item = productPaged[index]
+                item?.let { product ->
+                    ProductItem(product) {
+                        onClickItem.invoke(it.id)
+                    }
+                }
+            }
+
+            when {
+                productPaged.loadState.refresh is LoadState.Loading -> {
+                    item(span = { GridItemSpan(2) }) {
                         Loading(modifier = Modifier.fillMaxWidth())
                     }
                 }
-                is Async.Failure -> {
-                    val throwable = async.throwable
-                    item(
-                        span = { GridItemSpan(2) }
-                    ) {
+                productPaged.loadState.refresh is LoadState.Error -> {
+                    val loadState = productPaged.loadState.append as LoadState.Error
+                    val throwable = loadState.error
+                    item(span = { GridItemSpan(2) }) {
                         Failure(modifier = Modifier.fillMaxWidth(), throwable.message)
                     }
                 }
-                is Async.Success -> {
-                    val data = async.data
-                    items(data) { product ->
-                        ProductItem(product) {
-                            onClickItem.invoke(it.id)
-                        }
+                productPaged.loadState.append is LoadState.Loading -> {
+                    item(span = { GridItemSpan(2) }) {
+                        Loading(modifier = Modifier.fillMaxWidth())
                     }
                 }
-                else -> {}
+                productPaged.loadState.append is LoadState.Error -> {
+                    val loadState = productPaged.loadState.append as LoadState.Error
+                    val throwable = loadState.error
+                    item(span = { GridItemSpan(2) }) {
+                        Failure(modifier = Modifier.fillMaxWidth(), throwable.message)
+                    }
+                }
             }
         }
     }

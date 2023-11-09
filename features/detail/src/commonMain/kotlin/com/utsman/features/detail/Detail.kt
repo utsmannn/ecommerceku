@@ -9,7 +9,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.utsman.apis.product.LocalProductRepository
-import com.utsman.apis.product.model.ProductDetail
+import com.utsman.apis.product.model.entity.ProductDetail
 import com.utsman.libraries.core.state.Async
 import com.utsman.libraries.core.viewmodel.rememberViewModel
 import com.utsman.libraries.sharedui.Failure

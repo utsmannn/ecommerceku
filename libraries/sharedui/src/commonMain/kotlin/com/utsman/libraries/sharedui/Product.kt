@@ -14,7 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.utsman.apis.product.model.ProductItemList
+import com.utsman.apis.product.model.entity.ProductItemList
 import com.utsman.libraries.core.utils.currency
 
 @Composable
