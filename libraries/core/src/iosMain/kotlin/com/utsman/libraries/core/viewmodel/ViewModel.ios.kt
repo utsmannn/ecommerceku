@@ -9,7 +9,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlin.coroutines.CoroutineContext
 
-actual abstract class ViewModel {
+actual abstract class ViewModelPlatform {
     actual val viewModelScope: CoroutineScope = object : CoroutineScope {
         override val coroutineContext: CoroutineContext
             get() = SupervisorJob() + Dispatchers.Main
@@ -25,7 +25,7 @@ actual abstract class ViewModel {
 }
 
 @Composable
-actual fun <T: ViewModel> rememberViewModel(viewModel: () -> T): T {
+actual fun <T: ViewModel<*, *>> rememberViewModel(viewModel: () -> T): T {
     val host = LocalViewModelHost.current
     val vm = remember {
         host.getViewModel(viewModel.invoke())

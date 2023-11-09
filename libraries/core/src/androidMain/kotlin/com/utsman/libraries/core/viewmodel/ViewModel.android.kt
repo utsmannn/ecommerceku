@@ -6,7 +6,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.lifecycle.viewModelScope as androidViewModelScope
 
-actual abstract class ViewModel : androidx.lifecycle.ViewModel() {
+actual abstract class ViewModelPlatform : androidx.lifecycle.ViewModel() {
     actual val viewModelScope = androidViewModelScope
 
     actual override fun onCleared() {
@@ -19,7 +19,7 @@ actual abstract class ViewModel : androidx.lifecycle.ViewModel() {
 }
 
 @Composable
-actual fun <T: ViewModel> rememberViewModel(viewModel: () -> T): T {
+actual fun <T: ViewModel<*, *>> rememberViewModel(viewModel: () -> T): T {
     val lifecycle = LocalLifecycleOwner.current.lifecycle
     val host = LocalViewModelHost.current
     val vm = remember {
