@@ -25,8 +25,6 @@ abstract class ViewModel<S: Any, I: Intent>(initialState: S) : ViewModelPlatform
 
     fun sendIntent(intent: I) = viewModelScope.launch {
         _intent.value = intent
-        delay(80)
-        _intent.value = Intent.Idle
     }
 
     protected fun updateUiState(block: S.() -> S) {
