@@ -1,9 +1,15 @@
 package com.utsman.libraries.sharedui
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,4 +48,26 @@ fun Loading(modifier: Modifier = Modifier) {
 @Composable
 fun Failure(modifier: Modifier = Modifier, text: String?) {
     Text("error -> $text")
+}
+
+@Composable
+fun ToolbarWithBackNavigation(title: String, onBack: () -> Unit) {
+    TopAppBar(
+        title = {
+            Text(text = title)
+        },
+        navigationIcon = {
+            val vector = Icons.Filled.ArrowBack
+            IconButton(
+                onClick = {
+                    onBack.invoke()
+                }
+            ) {
+                Icon(
+                    imageVector = vector,
+                    contentDescription = null
+                )
+            }
+        }
+    )
 }

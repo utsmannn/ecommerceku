@@ -21,11 +21,11 @@ class ProductRepository(
     private val productPagingSources: ProductPagingSources
 ) : Repository() {
 
-    val productPagingFlow = Pager(
+    val productPager = Pager(
         config = PagingConfig(pageSize = 10)
     ) {
         productPagingSources
-    }.flow
+    }
 
     suspend fun getProductList(page: Int): Flow<Async<List<ProductItemList>>> {
         return suspend {

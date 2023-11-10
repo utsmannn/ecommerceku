@@ -31,9 +31,11 @@ actual fun <T: ViewModel<*, *>> rememberViewModel(isRetain: Boolean, viewModel: 
             viewModel.invoke()
         }
     }
-    DisposableEffect(lifecycle) {
-        onDispose {
-            vm.clear()
+    if (!isRetain) {
+        DisposableEffect(lifecycle) {
+            onDispose {
+                vm.clear()
+            }
         }
     }
 

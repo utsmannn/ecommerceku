@@ -6,11 +6,15 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -25,6 +29,7 @@ import com.utsman.libraries.core.viewmodel.rememberViewModel
 import com.utsman.libraries.sharedui.Failure
 import com.utsman.libraries.sharedui.Loading
 import com.utsman.libraries.sharedui.ProductItem
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.map
 
 @Composable
@@ -37,6 +42,7 @@ fun Home(onClickItem: (Int) -> Unit) {
     val productPaged = viewModel.productPagedFlow.collectAsLazyPagingItems()
 
     val scaffoldState = rememberScaffoldState()
+    val lazyGridState = rememberLazyGridState()
 
     LaunchedEffect(homeIntent) {
         when (val intent = homeIntent) {

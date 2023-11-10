@@ -22,7 +22,10 @@ data class DetailScreen(
 
     @Composable
     override fun Content() {
-        Detail(productId)
+        val navigator = LocalNavigator.currentOrThrow
+        Detail(productId) {
+            navigator.pop()
+        }
     }
 
 }

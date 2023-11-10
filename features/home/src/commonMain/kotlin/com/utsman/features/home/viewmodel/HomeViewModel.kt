@@ -13,7 +13,18 @@ class HomeViewModel(
     private val productRepository: ProductRepository
 ) : ViewModel<HomeUiState, HomeIntent>(HomeUiState()) {
 
-    val productPagedFlow = productRepository.productPagingFlow.cachedIn(viewModelScope)
+    val productPagedFlow = productRepository
+        .productPager
+        .flow
+        .cachedIn(viewModelScope)
+
+    fun updateScrollPosition(position: Int) {
+        updateUiState {
+            copy(
+                scrollPosition = position
+            )
+        }
+    }
 
     fun getProductList(page: Int) = viewModelScope.launch {
         productRepository.getProductList(page)
