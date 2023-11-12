@@ -16,12 +16,14 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.PagingData
 import app.cash.paging.compose.collectAsLazyPagingItems
 import com.utsman.apis.product.LocalProductRepository
+import com.utsman.apis.product.model.entity.ProductItemList
 import com.utsman.features.home.state.HomeIntent
 import com.utsman.features.home.viewmodel.HomeViewModel
 import com.utsman.libraries.core.state.Async
@@ -33,44 +35,33 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.map
 
 @Composable
-fun Home(onClickItem: (Int) -> Unit) {
+fun Home(onClickItem: (ProductItemList) -> Unit) {
     val productRepository = LocalProductRepository.current
     val viewModel = rememberViewModel { HomeViewModel(productRepository) }
     val uiState by viewModel.uiState.collectAsState()
-    val homeIntent by viewModel.intent.collectAsState()
 
     val productPaged = viewModel.productPagedFlow.collectAsLazyPagingItems()
 
     val scaffoldState = rememberScaffoldState()
-    val lazyGridState = rememberLazyGridState()
 
-    LaunchedEffect(homeIntent) {
-        when (val intent = homeIntent) {
-            is HomeIntent.LoadProductList -> {
-                //viewModel.getProductList(intent.page)
-//                viewModel.getProductPaged()
-            }
-            is HomeIntent.ShowSnackBar -> {
-                val message = intent.message
-                scaffoldState.snackbarHostState.showSnackbar(message)
-            }
-            else -> {}
-        }
-    }
 
     Scaffold(
         scaffoldState = scaffoldState
     ) {
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
-            contentPadding = PaddingValues(12.dp)
+            contentPadding = PaddingValues(12.dp),
         ) {
 
             items(productPaged.itemCount) { index ->
                 val item = productPaged[index]
                 item?.let { product ->
                     ProductItem(product) {
-                        onClickItem.invoke(it.id)
+                        viewModel.sendIntent(
+                            HomeIntent.ToDetail(
+                                onClickItem, it
+                            )
+                        )
                     }
                 }
             }

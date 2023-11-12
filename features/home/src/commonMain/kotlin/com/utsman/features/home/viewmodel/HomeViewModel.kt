@@ -18,21 +18,24 @@ class HomeViewModel(
         .flow
         .cachedIn(viewModelScope)
 
-    fun updateScrollPosition(position: Int) {
-        updateUiState {
-            copy(
-                scrollPosition = position
-            )
-        }
-    }
-
-    fun getProductList(page: Int) = viewModelScope.launch {
-        productRepository.getProductList(page)
-            .stateIn(this)
-            .collectLatest {
-                updateUiState {
-                    copy(asyncProduct = it)
+    override fun sendIntent(intent: HomeIntent) {
+        when (intent) {
+            is HomeIntent.ShowSnackBar -> {
+                val message = intent.message
+                intent.scope.launch {
+                    intent.scaffoldState.snackbarHostState.showSnackbar(message)
                 }
             }
+            is HomeIntent.ToDetail -> {
+                intent.onClickItem.invoke(intent.productItemList)
+            }
+            is HomeIntent.SavePosition -> {
+                updateUiState {
+                    copy(
+                        scrollPosition = intent.position
+                    )
+                }
+            }
+        }
     }
 }

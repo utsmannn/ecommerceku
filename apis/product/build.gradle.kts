@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.realm.kotlin)
 }
 
 @OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
@@ -31,11 +32,8 @@ kotlin {
             dependencies {
                 //put your multiplatform dependencies here
                 api(projects.libraries.core)
-            }
-        }
-        val commonTest by getting {
-            dependencies {
-                implementation(libs.kotlin.test)
+                implementation(libs.realm.kotlin.base)
+                implementation(libs.realm.kotlin.sync)
             }
         }
     }

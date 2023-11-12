@@ -46,6 +46,7 @@ kotlin {
                 implementation(projects.apis.product)
             }
         }
+
         val commonTest by getting {
             dependencies {
                 implementation(libs.kotlin.test)

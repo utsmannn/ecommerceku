@@ -2,6 +2,8 @@ package com.utsman.apis.product.model
 
 import com.utsman.apis.product.model.entity.ProductDetail
 import com.utsman.apis.product.model.entity.ProductItemList
+import com.utsman.apis.product.model.local.CategoryItemRealm
+import com.utsman.apis.product.model.local.WishlistItemRealm
 import com.utsman.apis.product.model.response.ProductDetailResponse
 import com.utsman.apis.product.model.response.ProductListResponse
 
@@ -9,7 +11,7 @@ fun ProductListResponse.DataResponse.toProductItemList(): ProductItemList {
     return ProductItemList(
         id = id ?: 0,
         name = name ?: "",
-        sortDescription = sortDescription ?: "",
+        shortDescription = sortDescription ?: "",
         category = category?.toCategoryItem() ?: ProductItemList.CategoryItem(0, "", ""),
         price = price ?: 0.0,
         rating = rating ?: 0.0,
@@ -54,5 +56,40 @@ fun ProductDetailResponse.DataResponse.CategoryResponse.toCategoryDetail(): Prod
         id = id ?: 0,
         name = name.orEmpty(),
         description = description.orEmpty()
+    )
+}
+
+fun ProductItemList.toWishlist(): WishlistItemRealm {
+    return WishlistItemRealm().also {
+        it.id = id
+        it.name = name
+        it.category = CategoryItemRealm().also { cat ->
+            cat.id = category.id
+            cat.name = category.name
+            cat.description = category.description
+        }
+        it.discount = discount
+        it.images = images
+        it.price = price
+        it.discount = discount
+        it.rating = rating
+        it.shortDescription = shortDescription
+    }
+}
+
+fun WishlistItemRealm.toProductItem(): ProductItemList {
+    return ProductItemList(
+        id = id,
+        name = name,
+        shortDescription = shortDescription,
+        category = ProductItemList.CategoryItem(
+            id = category?.id ?: 0,
+            name = category?.name.orEmpty(),
+            description = category?.description.orEmpty()
+        ),
+        price = price,
+        rating = rating,
+        discount = discount,
+        images = images
     )
 }

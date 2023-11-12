@@ -55,10 +55,15 @@ kotlin {
                 implementation(libs.voyager.transitions)
 
                 implementation(projects.libraries.core)
+                implementation(projects.libraries.sharedui)
+
+                implementation(projects.apis.authentication)
                 implementation(projects.apis.product)
 
+                implementation(projects.features.user)
                 implementation(projects.features.home)
                 implementation(projects.features.detail)
+                implementation(projects.features.wishlist)
             }
         }
     }

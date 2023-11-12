@@ -3,7 +3,7 @@ package com.utsman.apis.product.model.entity
 data class ProductItemList(
     val id: Int,
     val name: String,
-    val sortDescription: String,
+    val shortDescription: String,
     val category: CategoryItem,
     val price: Double,
     val rating: Double,
