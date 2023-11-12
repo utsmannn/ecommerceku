@@ -59,11 +59,13 @@ kotlin {
 
                 implementation(projects.apis.authentication)
                 implementation(projects.apis.product)
+                implementation(projects.apis.cart)
 
                 implementation(projects.features.user)
                 implementation(projects.features.home)
                 implementation(projects.features.detail)
                 implementation(projects.features.wishlist)
+                implementation(projects.features.cart)
             }
         }
     }

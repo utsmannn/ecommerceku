@@ -12,8 +12,9 @@ class SplashScreenViewModel(
     override fun sendIntent(intent: SplashScreenIntent) {
         when (intent) {
             is SplashScreenIntent.GetCurrentUser -> getCurrentUser()
-            is SplashScreenIntent.ToHome -> intent.toHome.invoke()
-            is SplashScreenIntent.ToLogin -> intent.toLogin.invoke()
+            is SplashScreenIntent.ToHome -> {
+                intent.toHome.invoke(intent.isLoggedIn)
+            }
         }
     }
 

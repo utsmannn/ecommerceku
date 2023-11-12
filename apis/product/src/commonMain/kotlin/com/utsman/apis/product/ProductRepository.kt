@@ -21,19 +21,15 @@ import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.transform
-import kotlinx.coroutines.flow.transformWhile
 import kotlinx.coroutines.withContext
 
 
 class ProductRepository(
-    private val networkDataSources: ProductNetworkDataSource,
+    private val productNetworkDataSources: ProductNetworkDataSource,
     private val localDataSources: WishlistLocalDataSources,
     private val pagingSources: ProductPagingSources
 ) : Repository() {
@@ -44,26 +40,9 @@ class ProductRepository(
         pagingSources
     }
 
-    suspend fun getProductList(page: Int): Flow<Async<List<ProductItemList>>> {
-        return suspend {
-            networkDataSources.getProduct(page)
-        }.reduce<ProductListResponse, List<ProductItemList>> { response ->
-            val responseList = response.data?.filterNotNull().orEmpty()
-            if (responseList.isEmpty()) {
-                val emptyThrowable = Throwable("Product is empty")
-                Async.Failure(emptyThrowable)
-            } else {
-                val dataList = responseList.map {
-                    it.toProductItemList()
-                }
-                Async.Success(dataList)
-            }
-        }
-    }
-
     suspend fun getProductDetail(productId: Int): Flow<Async<ProductDetail>> {
         return suspend {
-            networkDataSources.getProductId(productId)
+            productNetworkDataSources.getProductId(productId)
         }.reduce<ProductDetailResponse, ProductDetail> { response ->
             val responseData = response.data
 

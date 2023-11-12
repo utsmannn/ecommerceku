@@ -15,8 +15,7 @@ import com.utsman.libraries.core.viewmodel.rememberViewModel
 
 @Composable
 fun SplashScreen(
-    toLogin: () -> Unit,
-    toHome: () -> Unit
+    toHome: (isLoggedIn: Boolean) -> Unit
 ) {
     val authRepository = LocalAuthenticationRepository.current
     val viewModel = rememberViewModel { SplashScreenViewModel(authRepository) }
@@ -36,10 +35,10 @@ fun SplashScreen(
                 CircularProgressIndicator()
             }
             is Async.Failure -> {
-                viewModel.sendIntent(SplashScreenIntent.ToLogin(toLogin))
+                viewModel.sendIntent(SplashScreenIntent.ToHome(false, toHome))
             }
             is Async.Success -> {
-                viewModel.sendIntent(SplashScreenIntent.ToHome(toHome))
+                viewModel.sendIntent(SplashScreenIntent.ToHome(true, toHome))
             }
             else -> {}
         }

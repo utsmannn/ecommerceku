@@ -22,6 +22,9 @@ import com.utsman.api.authentication.LocalAuthenticationRepository
 import com.utsman.api.authentication.datasources.AuthenticationNetworkDataSource
 import com.utsman.api.authentication.datasources.KeyValueDataSource
 import com.utsman.api.authentication.datasources.TokenAuthenticationDataSource
+import com.utsman.apis.cart.CartRepository
+import com.utsman.apis.cart.LocalCartRepository
+import com.utsman.apis.cart.datasources.CartNetworkDataSource
 import com.utsman.apis.product.LocalProductRepository
 import com.utsman.apis.product.ProductRepository
 import com.utsman.apis.product.datasources.WishlistLocalDataSources
@@ -59,12 +62,15 @@ fun App() {
             productPagingSources
         )
     }
+    val cartNetworkDataSource = remember { CartNetworkDataSource(tokenAuthentication) }
+    val cartRepository = remember { CartRepository(cartNetworkDataSource, productRepository) }
 
     CompositionLocalProvider(
         LocalKamelConfig provides customKamelConfig,
+        LocalViewModelHost provides viewModelHost,
         LocalAuthenticationRepository provides authenticationRepository,
         LocalProductRepository provides productRepository,
-        LocalViewModelHost provides viewModelHost
+        LocalCartRepository provides cartRepository
     ) {
 
         ScreenRegistry {
@@ -85,41 +91,4 @@ fun App() {
             }
         }
     }
-}
-
-enum class Tab {
-    HOME, WISHLIST
-}
-
-class TabNavigator {
-    var currentTab by mutableStateOf(Tab.HOME)
-}
-
-val LocalTabNavigator = compositionLocalOf<TabNavigator> { error("Tab navigator not provided") }
-
-@OptIn(ExperimentalFoundationApi::class)
-@Composable
-fun RowScope.TabItem(tab: Tab, pagerState: PagerState) {
-    val tabNavigator = LocalTabNavigator.current
-
-    val isSelected by derivedStateOf { tabNavigator.currentTab == tab }
-    val scope = rememberCoroutineScope()
-
-    BottomNavigationItem(
-        selected = isSelected,
-        onClick = {
-            val page = when (tab) {
-                Tab.HOME -> 0
-                Tab.WISHLIST -> 1
-            }
-            scope.launch {
-                pagerState.animateScrollToPage(page)
-            }
-            tabNavigator.currentTab = tab
-        },
-        icon = {},
-        label = {
-            Text(tab.name.capitalize(Locale.current))
-        }
-    )
 }

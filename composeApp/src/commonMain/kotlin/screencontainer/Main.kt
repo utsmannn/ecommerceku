@@ -26,9 +26,6 @@ class SplashScreenScreen : Screen {
     @Composable
     override fun Content() {
         SplashScreen(
-            toLogin = {
-                mainScreenStack.push(LoginScreen())
-            },
             toHome =  {
                 mainScreenStack.push(HomePagerScreen())
             }

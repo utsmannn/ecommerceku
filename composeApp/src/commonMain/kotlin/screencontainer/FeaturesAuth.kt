@@ -18,7 +18,9 @@ class LoginScreen : Screen {
     override fun Content() {
         Login(
             toHome = {
-                mainScreenStack.push(HomePagerScreen())
+                mainScreenStack.popUntil {
+                    it is HomePagerScreen
+                }
             },
             toRegister = {
                 mainScreenStack.push(RegisterScreen())
